@@ -1,0 +1,1501 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0B101E">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>TenangJiwa — Mindfulness, Fokus & Tidur</title>
+  <style>
+    :root {
+      --bg-deep: #0B101E;
+      --bg-mid: #141B2D;
+      --glass-bg: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(255, 255, 255, 0.09);
+      --text-main: #F1F5F9;
+      --text-muted: #94A3B8;
+      --indigo: #818CF8;
+      --indigo-glow: rgba(129, 140, 248, 0.35);
+      --teal: #2DD4BF;
+      --teal-glow: rgba(45, 212, 191, 0.3);
+      --amber: #F59E0B;
+      --rose: #FB7185;
+      --nav-height: 72px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    input, textarea {
+      user-select: text;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: radial-gradient(circle at top right, #1B2542 0%, var(--bg-deep) 55%, #070B14 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    .app-shell {
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+      position: relative;
+      padding-bottom: calc(var(--nav-height) + 28px);
+    }
+
+    /* Top Header */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 20px 10px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(11, 16, 30, 0.78);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.15rem;
+      letter-spacing: 0.3px;
+    }
+
+    .brand-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal), var(--indigo));
+      box-shadow: 0 0 12px var(--teal-glow);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-pro {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 99px;
+      background: linear-gradient(135deg, #F59E0B, #D97706);
+      color: #0B101E;
+      display: none;
+    }
+
+    .badge-pro.active {
+      display: inline-block;
+    }
+
+    .lang-btn {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      color: var(--text-main);
+      padding: 6px 12px;
+      border-radius: 99px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .lang-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* Views */
+    .view {
+      display: none;
+      padding: 12px 20px 20px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Glass Cards */
+    .card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 18px;
+      margin-bottom: 16px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-sub {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    /* Home Specific */
+    .greeting-box {
+      margin-bottom: 18px;
+    }
+
+    .greeting-box h1 {
+      font-size: 1.55rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .greeting-box p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .streak-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .streak-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(245, 158, 11, 0.14);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      color: #FCD34D;
+      padding: 6px 12px;
+      border-radius: 99px;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .mood-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+
+    .mood-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid transparent;
+      border-radius: 14px;
+      padding: 10px 4px;
+      font-size: 1.45rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .mood-btn span {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+    }
+
+    .mood-btn.selected {
+      background: rgba(129, 140, 248, 0.2);
+      border-color: var(--indigo);
+      transform: translateY(-2px);
+    }
+
+    .sos-btn {
+      width: 100%;
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(251, 113, 133, 0.45);
+      background: linear-gradient(135deg, rgba(251, 113, 133, 0.22), rgba(245, 158, 11, 0.16));
+      color: #FFE4E6;
+      font-weight: 700;
+      font-size: 0.98rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 24px rgba(251, 113, 133, 0.12);
+      transition: transform 0.2s;
+    }
+
+    .sos-btn:active {
+      transform: scale(0.98);
+    }
+
+    .quick-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .quick-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      border-radius: 18px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .quick-card:active {
+      transform: scale(0.98);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .quick-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .quick-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+    }
+
+    .ic-focus { background: rgba(129, 140, 248, 0.18); color: var(--indigo); }
+    .ic-sleep { background: rgba(45, 212, 191, 0.16); color: var(--teal); }
+    .ic-stress { background: rgba(245, 158, 11, 0.16); color: var(--amber); }
+
+    /* Pills & Buttons */
+    .pill-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .pill {
+      flex: 1;
+      min-width: 85px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--glass-border);
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .pill.active {
+      background: rgba(129, 140, 248, 0.22);
+      border-color: var(--indigo);
+      color: var(--text-main);
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 14px;
+      border-radius: 14px;
+      border: none;
+      background: linear-gradient(135deg, var(--indigo), #6366F1);
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 6px 20px var(--indigo-glow);
+      transition: all 0.2s;
+    }
+
+    .btn-primary:active {
+      transform: scale(0.98);
+    }
+
+    .btn-teal {
+      background: linear-gradient(135deg, var(--teal), #0D9488);
+      color: #062825;
+      box-shadow: 0 6px 20px var(--teal-glow);
+    }
+
+    .btn-outline {
+      width: 100%;
+      padding: 12px;
+      border-radius: 14px;
+      background: transparent;
+      border: 1px solid var(--glass-border);
+      color: var(--text-main);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Breathing Circle */
+    .breath-stage {
+      height: 220px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin: 10px 0 18px;
+    }
+
+    .breath-ring {
+      width: 125px;
+      height: 125px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(45, 212, 191, 0.35) 0%, rgba(129, 140, 248, 0.15) 70%);
+      border: 2px solid rgba(45, 212, 191, 0.6);
+      box-shadow: 0 0 35px rgba(45, 212, 191, 0.25);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: transform 4s ease-in-out, box-shadow 4s ease-in-out;
+      text-align: center;
+    }
+
+    .breath-label {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .breath-count {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--teal);
+    }
+
+    /* Thought Dump */
+    .dump-textarea {
+      width: 100%;
+      min-height: 110px;
+      background: rgba(7, 11, 20, 0.6);
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+      padding: 14px;
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 0.92rem;
+      resize: none;
+      margin-bottom: 12px;
+      transition: opacity 1.1s ease, filter 1.1s ease, transform 1.1s ease;
+    }
+
+    .dump-textarea:focus {
+      outline: none;
+      border-color: var(--indigo);
+    }
+
+    .dump-textarea.dissolving {
+      opacity: 0;
+      filter: blur(8px);
+      transform: translateY(-16px) scale(0.96);
+    }
+
+    /* Sound Sliders */
+    .slider-row {
+      margin-bottom: 16px;
+    }
+
+    .slider-head {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.88rem;
+      margin-bottom: 6px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      height: 6px;
+      border-radius: 99px;
+      background: rgba(255, 255, 255, 0.12);
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--teal);
+      cursor: pointer;
+      box-shadow: 0 0 10px var(--teal-glow);
+    }
+
+    /* Big Timer Display */
+    .timer-display {
+      font-size: 3.4rem;
+      font-weight: 800;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 2px;
+      margin: 14px 0 20px;
+      background: linear-gradient(135deg, #FFFFFF, var(--indigo));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Sleep Script Steps */
+    .script-step {
+      padding: 12px 14px;
+      border-left: 3px solid var(--teal);
+      background: rgba(45, 212, 191, 0.06);
+      border-radius: 0 12px 12px 0;
+      margin-bottom: 10px;
+      font-size: 0.88rem;
+      color: #CBD5E1;
+    }
+
+    .script-step strong {
+      color: var(--teal);
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    /* Pro Unlock */
+    .pro-list {
+      list-style: none;
+      margin: 12px 0 18px;
+    }
+
+    .pro-list li {
+      padding: 8px 0;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .code-input {
+      width: 100%;
+      padding: 14px;
+      border-radius: 14px;
+      background: rgba(7, 11, 20, 0.65);
+      border: 1px solid var(--glass-border);
+      color: var(--text-main);
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .code-input:focus {
+      outline: none;
+      border-color: var(--teal);
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 480px;
+      height: var(--nav-height);
+      background: rgba(11, 16, 30, 0.92);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-top: 1px solid var(--glass-border);
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      z-index: 30;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .nav-item {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .nav-item svg {
+      width: 22px;
+      height: 22px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .nav-item.active {
+      color: var(--teal);
+    }
+
+    /* SOS Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(7, 11, 20, 0.95);
+      backdrop-filter: blur(16px);
+      z-index: 100;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .sos-circle {
+      width: 170px;
+      height: 170px;
+      border-radius: 50%;
+      border: 3px solid var(--rose);
+      background: radial-gradient(circle, rgba(251, 113, 133, 0.28), transparent 70%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 26px 0;
+      transition: transform 4s ease-in-out;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      top: 74px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background: #1E293B;
+      border: 1px solid var(--teal);
+      color: var(--text-main);
+      padding: 10px 18px;
+      border-radius: 99px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+      z-index: 200;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-shell">
+  <!-- Header -->
+  <header class="top-bar">
+    <div class="brand">
+      <div class="brand-dot"></div>
+      <span>TenangJiwa</span>
+    </div>
+    <div class="header-actions">
+      <span id="proBadge" class="badge-pro">PRO</span>
+      <button id="langToggle" class="lang-btn">BM / EN</button>
+    </div>
+  </header>
+
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
+
+  <!-- TAB 1: HOME -->
+  <main id="view-home" class="view active">
+    <div class="greeting-box">
+      <h1 id="greetingText">Selamat Malam</h1>
+      <p data-i18n="home_sub">Ambil nafas dalam. Ruang tenang anda bermula di sini.</p>
+    </div>
+
+    <!-- SOS Panic Button -->
+    <button id="openSosBtn" class="sos-btn">
+      <div>
+        <div style="font-size:1rem;" data-i18n="sos_title">Mod SOS Panik (60 Saat)</div>
+        <div style="font-size:0.78rem; font-weight:400; opacity:0.85;" data-i18n="sos_sub">Redakan degupan jantung & cemas serta-merta</div>
+      </div>
+      <span style="font-size:1.3rem;">⚡</span>
+    </button>
+
+    <!-- Streak & Mood Card -->
+    <div class="card">
+      <div class="streak-row">
+        <span style="font-weight:600; font-size:0.95rem;" data-i18n="mood_q">Bagaimana perasaan anda hari ini?</span>
+        <div class="streak-pill">🔥 <span id="streakCount">1</span> <span data-i18n="days">Hari</span></div>
+      </div>
+      <div class="mood-grid" id="moodGrid">
+        <button class="mood-btn" data-mood="calm">😌<span data-i18n="m_calm">Tenang</span></button>
+        <button class="mood-btn" data-mood="happy">😊<span data-i18n="m_happy">Baik</span></button>
+        <button class="mood-btn" data-mood="tired">😴<span data-i18n="m_tired">Penat</span></button>
+        <button class="mood-btn" data-mood="anxious">😰<span data-i18n="m_anxious">Cemas</span></button>
+        <button class="mood-btn" data-mood="stressed">😫<span data-i18n="m_stressed">Stres</span></button>
+      </div>
+    </div>
+
+    <!-- Quick Access 3 Pillars -->
+    <div class="quick-grid">
+      <div class="quick-card" onclick="switchTab('focus')">
+        <div class="quick-left">
+          <div class="quick-icon ic-focus">🎯</div>
+          <div>
+            <div style="font-weight:600;" data-i18n="pillar_focus">Fokus Mendalam</div>
+            <div style="font-size:0.8rem; color:var(--text-muted);" data-i18n="pillar_focus_sub">Pemasa Pomodoro & bunyi fokus</div>
+          </div>
+        </div>
+        <span style="color:var(--text-muted);">›</span>
+      </div>
+
+      <div class="quick-card" onclick="switchTab('sleep')">
+        <div class="quick-left">
+          <div class="quick-icon ic-sleep">🌙</div>
+          <div>
+            <div style="font-weight:600;" data-i18n="pillar_sleep">Tidur Lena</div>
+            <div style="font-size:0.8rem; color:var(--text-muted);" data-i18n="pillar_sleep_sub">Bunyi hujan, ombak & pemasa tidur</div>
+          </div>
+        </div>
+        <span style="color:var(--text-muted);">›</span>
+      </div>
+
+      <div class="quick-card" onclick="switchTab('stress')">
+        <div class="quick-left">
+          <div class="quick-icon ic-stress">🍃</div>
+          <div>
+            <div style="font-weight:600;" data-i18n="pillar_stress">Redakan Stres</div>
+            <div style="font-size:0.8rem; color:var(--text-muted);" data-i18n="pillar_stress_sub">Teknik pernafasan & jurnal luahan</div>
+          </div>
+        </div>
+        <span style="color:var(--text-muted);">›</span>
+      </div>
+    </div>
+  </main>
+
+  <!-- TAB 2: STRESS -->
+  <section id="view-stress" class="view">
+    <div class="card">
+      <div class="card-title" data-i18n="breath_title">Pemasa Pernafasan</div>
+      <div class="card-sub" data-i18n="breath_sub">Ikuti ritma bulatan untuk menenangkan sistem saraf.</div>
+
+      <div class="pill-group">
+        <button class="pill active" id="modeBoxBtn" onclick="selectBreathMode('box')">Box 4-4-4-4</button>
+        <button class="pill" id="mode478Btn" onclick="selectBreathMode('478')">4-7-8 Anti-Cemas <span class="lock-icon">🔒</span></button>
+      </div>
+
+      <div class="breath-stage">
+        <div id="breathRing" class="breath-ring">
+          <div id="breathLabel" class="breath-label" data-i18n="ready">Sedia</div>
+          <div id="breathCount" class="breath-count">•</div>
+        </div>
+      </div>
+
+      <button id="breathToggleBtn" class="btn-primary btn-teal" data-i18n="start_breath">Mula Bernafas</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title" data-i18n="dump_title">Jurnal Luahan (Thought Dump)</div>
+      <div class="card-sub" data-i18n="dump_sub">Tulis apa yang menyesakkan fikiran. Tekan lepaskan untuk memadamnya terus.</div>
+      <textarea id="dumpInput" class="dump-textarea" placeholder="..."></textarea>
+      <button id="releaseBtn" class="btn-primary" data-i18n="release_btn">Lepaskan & Padam ✨</button>
+    </div>
+  </section>
+
+  <!-- TAB 3: SLEEP -->
+  <section id="view-sleep" class="view">
+    <div class="card">
+      <div class="card-title">
+        <span data-i18n="mixer_title">Soundscape Mixer</span>
+        <span id="audioStatus" style="font-size:0.75rem; color:var(--teal);">OFF</span>
+      </div>
+      <div class="card-sub" data-i18n="mixer_sub">Laras gabungan bunyi ambien janaan asli (tanpa guna data).</div>
+
+      <div class="slider-row">
+        <div class="slider-head"><span data-i18n="snd_rain">🌧️ Hujan Lembut</span><span id="valRain">0%</span></div>
+        <input type="range" id="volRain" min="0" max="100" value="0">
+      </div>
+
+      <div class="slider-row">
+        <div class="slider-head"><span data-i18n="snd_brown">🌊 Brown Noise (Tidur Dalam)</span><span id="valBrown">0%</span></div>
+        <input type="range" id="volBrown" min="0" max="100" value="0">
+      </div>
+
+      <div class="slider-row">
+        <div class="slider-head"><span data-i18n="snd_wind">🍃 Angin & Ombak Malam</span><span id="valWind">0%</span></div>
+        <input type="range" id="volWind" min="0" max="100" value="0">
+      </div>
+
+      <button id="stopAudioBtn" class="btn-outline" data-i18n="stop_all_snd">Hentikan Semua Bunyi</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <span data-i18n="sleep_timer_title">Pemasa Tidur (Auto Fade-Out)</span>
+        <span id="sleepTimerDisplay" style="color:var(--teal); font-weight:700;">--:--</span>
+      </div>
+      <div class="pill-group" style="margin-top:10px;">
+        <button class="pill" onclick="startSleepTimer(15)">15 min</button>
+        <button class="pill" onclick="startSleepTimer(30, true)">30 min <span class="lock-icon">🔒</span></button>
+        <button class="pill" onclick="startSleepTimer(60, true)">60 min <span class="lock-icon">🔒</span></button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" data-i18n="sleep_guide_title">Panduan Relaksasi Sebelum Tidur</div>
+      <div style="margin-top:10px;">
+        <div class="script-step">
+          <strong data-i18n="sg_1_t">1. Lepaskan Ketegangan Bahu</strong>
+          <span data-i18n="sg_1_d">Baring selesa. Jatuhkan bahu jauh dari telinga dan kendurkan rahang anda.</span>
+        </div>
+        <div class="script-step">
+          <strong data-i18n="sg_2_t">2. Imbasan Badan (Body Scan)</strong>
+          <span data-i18n="sg_2_d">Rasakan berat kaki, paha, dan belakang badan tenggelam lembut ke atas tilam.</span>
+        </div>
+        <div class="script-step">
+          <strong data-i18n="sg_3_t">3. Hembusan Perlahan</strong>
+          <span data-i18n="sg_3_d">Hembus nafas lebih panjang daripada tarikan. Biarkan fikiran berlalu seperti awan.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB 4: FOCUS -->
+  <section id="view-focus" class="view">
+    <div class="card">
+      <div class="card-title" data-i18n="focus_title">Pemasa Fokus (Deep Work)</div>
+      <div class="card-sub" data-i18n="focus_sub">Elakkan gangguan dan siapkan satu tugasan penting pada satu masa.</div>
+
+      <div class="pill-group">
+        <button class="pill active" id="foc25" onclick="setFocusDuration(25, false, this)">25 min</button>
+        <button class="pill" id="foc45" onclick="setFocusDuration(45, true, this)">45 min <span class="lock-icon">🔒</span></button>
+        <button class="pill" id="foc60" onclick="setFocusDuration(60, true, this)">60 min <span class="lock-icon">🔒</span></button>
+      </div>
+
+      <div id="focusDisplay" class="timer-display">25:00</div>
+
+      <div style="display:flex; gap:10px;">
+        <button id="focusStartBtn" class="btn-primary" data-i18n="start_focus">Mula Fokus</button>
+        <button id="focusResetBtn" class="btn-outline" style="width:38%;" data-i18n="reset">Set Semula</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <span data-i18n="focus_snd_title">Bunyi Latar Fokus</span>
+        <span id="focusHumStatus" style="font-size:0.78rem; color:var(--indigo);">OFF</span>
+      </div>
+      <div class="card-sub" data-i18n="focus_snd_sub">Frekuensi rendah (Ambient Hum) untuk menapis bunyi bising persekitaran.</div>
+      <button id="toggleFocusHumBtn" class="btn-outline" data-i18n="toggle_hum">Aktifkan Bunyi Fokus 🎧</button>
+    </div>
+  </section>
+
+  <!-- TAB 5: PRO / SETTINGS -->
+  <section id="view-pro" class="view">
+    <div class="card">
+      <div class="card-title">
+        <span data-i18n="acc_status">Status Akaun</span>
+        <span id="statusLabel" style="color:var(--amber); font-size:0.85rem;">Versi Percuma</span>
+      </div>
+      <div class="card-sub" data-i18n="pro_desc">Buka potensi penuh TenangJiwa sekali bayar sahaja (tiada yuran bulanan).</div>
+
+      <ul class="pro-list">
+        <li>✨ <span data-i18n="pro_f1">Teknik Pernafasan 4-7-8 Anti-Cemas</span></li>
+        <li>🌙 <span data-i18n="pro_f2">Pemasa Tidur 30 & 60 Minit (Auto Fade-Out)</span></li>
+        <li>🎯 <span data-i18n="pro_f3">Sesi Fokus Mendalam 45 & 60 Minit</span></li>
+        <li>🔓 <span data-i18n="pro_f4">Akses Sepanjang Hayat di Peranti Ini</span></li>
+      </ul>
+
+      <!-- TUKAR LINK PEMBAYARAN ANDA DI SINI -->
+      <a id="buyProLink" href="https://toyyibpay.com/" target="_blank" style="text-decoration:none; display:block; margin-bottom:16px;">
+        <button class="btn-primary btn-teal" type="button" data-i18n="get_pro_btn">Dapatkan Kod PRO Sekarang →</button>
+      </a>
+
+      <div style="border-top:1px solid var(--glass-border); padding-top:16px;">
+        <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:8px; text-align:center;" data-i18n="have_code">Sudah ada Kod Akses PRO?</div>
+        <input type="text" id="proCodeInput" class="code-input" placeholder="MASUKKAN KOD">
+        <button id="unlockProBtn" class="btn-primary" data-i18n="unlock_btn">Buka Kunci PRO 🔓</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-tab="home" onclick="switchTab('home')">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span data-i18n="nav_home">Utama</span>
+    </button>
+    <button class="nav-item" data-tab="stress" onclick="switchTab('stress')">
+      <svg viewBox="0 0 24 24"><path d="M12 22c4-4 8-7.5 8-12a8 8 0 1 0-16 0c0 4.5 4 8 8 12z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span data-i18n="nav_stress">Stres</span>
+    </button>
+    <button class="nav-item" data-tab="sleep" onclick="switchTab('sleep')">
+      <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <span data-i18n="nav_sleep">Tidur</span>
+    </button>
+    <button class="nav-item" data-tab="focus" onclick="switchTab('focus')">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+      <span data-i18n="nav_focus">Fokus</span>
+    </button>
+    <button class="nav-item" data-tab="pro" onclick="switchTab('pro')">
+      <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <span data-i18n="nav_pro">PRO</span>
+    </button>
+  </nav>
+</div>
+
+<!-- SOS Panic Modal -->
+<div id="sosModal" class="modal-overlay">
+  <div style="font-size:0.85rem; color:var(--rose); font-weight:700; letter-spacing:1.5px; text-transform:uppercase;">SOS RESET</div>
+  <h2 style="margin-top:6px;" data-i18n="sos_modal_title">Anda Selamat Sekarang</h2>
+  <p style="color:var(--text-muted); font-size:0.9rem; max-width:300px; margin-top:6px;" data-i18n="sos_modal_sub">Fokus hanya pada bulatan ini. Tarik nafas perlahan dan hembus lebih panjang.</p>
+
+  <div id="sosCircle" class="sos-circle">
+    <div id="sosCue" style="font-size:1.15rem; font-weight:700;">Tarik</div>
+    <div id="sosTimer" style="font-size:1.8rem; font-weight:800; color:var(--rose); margin-top:4px;">60s</div>
+  </div>
+
+  <button id="closeSosBtn" class="btn-outline" style="max-width:240px;" data-i18n="close_sos">Saya Sudah Lebih Tenang</button>
+</div>
+
+<script>
+  /* =========================================================
+     KONFIGURASI UTAMA (BOLEH UBAH KOD PRO DI SINI)
+     ========================================================= */
+  const SECRET_PRO_CODE = "TENANGPRO";
+
+  /* =========================================================
+     KAMUS DWI-BAHASA (BM & EN)
+     ========================================================= */
+  const i18n = {
+    ms: {
+      g_morning: "Selamat Pagi", g_afternoon: "Selamat Petang", g_evening: "Selamat Malam",
+      home_sub: "Ambil nafas dalam. Ruang tenang anda bermula di sini.",
+      sos_title: "Mod SOS Panik (60 Saat)", sos_sub: "Redakan degupan jantung & cemas serta-merta",
+      mood_q: "Bagaimana perasaan anda hari ini?", days: "Hari",
+      m_calm: "Tenang", m_happy: "Baik", m_tired: "Penat", m_anxious: "Cemas", m_stressed: "Stres",
+      pillar_focus: "Fokus Mendalam", pillar_focus_sub: "Pemasa Pomodoro & bunyi fokus",
+      pillar_sleep: "Tidur Lena", pillar_sleep_sub: "Bunyi hujan, ombak & pemasa tidur",
+      pillar_stress: "Redakan Stres", pillar_stress_sub: "Teknik pernafasan & jurnal luahan",
+      breath_title: "Pemasa Pernafasan", breath_sub: "Ikuti ritma bulatan untuk menenangkan sistem saraf.",
+      ready: "Sedia", inhale: "Tarik Nafas", hold: "Tahan", exhale: "Hembus",
+      start_breath: "Mula Bernafas", stop_breath: "Hentikan",
+      dump_title: "Jurnal Luahan (Thought Dump)", dump_sub: "Tulis apa yang menyesakkan fikiran. Tekan lepaskan untuk memadamnya terus.",
+      dump_ph: "Tulis kerisauan anda di sini... tiada siapa yang akan membacanya.",
+      release_btn: "Lepaskan & Padam ✨", dump_done: "Fikiran dilepaskan. Rasa lebih ringan.",
+      mixer_title: "Soundscape Mixer", mixer_sub: "Laras gabungan bunyi ambien janaan asli (tanpa guna data).",
+      snd_rain: "🌧️ Hujan Lembut", snd_brown: "🌊 Brown Noise (Tidur Dalam)", snd_wind: "🍃 Angin & Ombak Malam",
+      stop_all_snd: "Hentikan Semua Bunyi",
+      sleep_timer_title: "Pemasa Tidur (Auto Fade-Out)",
+      sleep_guide_title: "Panduan Relaksasi Sebelum Tidur",
+      sg_1_t: "1. Lepaskan Ketegangan Bahu", sg_1_d: "Baring selesa. Jatuhkan bahu jauh dari telinga dan kendurkan rahang anda.",
+      sg_2_t: "2. Imbasan Badan (Body Scan)", sg_2_d: "Rasakan berat kaki, paha, dan belakang badan tenggelam lembut ke atas tilam.",
+      sg_3_t: "3. Hembusan Perlahan", sg_3_d: "Hembus nafas lebih panjang daripada tarikan. Biarkan fikiran berlalu seperti awan.",
+      focus_title: "Pemasa Fokus (Deep Work)", focus_sub: "Elakkan gangguan dan siapkan satu tugasan penting pada satu masa.",
+      start_focus: "Mula Fokus", pause_focus: "Jeda", reset: "Set Semula",
+      focus_snd_title: "Bunyi Latar Fokus", focus_snd_sub: "Frekuensi rendah (Ambient Hum) untuk menapis bunyi bising persekitaran.",
+      toggle_hum: "Aktifkan Bunyi Fokus 🎧", stop_hum: "Matikan Bunyi Fokus",
+      acc_status: "Status Akaun", status_free: "Versi Percuma", status_pro: "Ahli PRO Aktif ✓",
+      pro_desc: "Buka potensi penuh TenangJiwa sekali bayar sahaja (tiada yuran bulanan).",
+      pro_f1: "Teknik Pernafasan 4-7-8 Anti-Cemas", pro_f2: "Pemasa Tidur 30 & 60 Minit (Auto Fade-Out)",
+      pro_f3: "Sesi Fokus Mendalam 45 & 60 Minit", pro_f4: "Akses Sepanjang Hayat di Peranti Ini",
+      get_pro_btn: "Dapatkan Kod PRO Sekarang →", have_code: "Sudah ada Kod Akses PRO?",
+      unlock_btn: "Buka Kunci PRO 🔓",
+      nav_home: "Utama", nav_stress: "Stres", nav_sleep: "Tidur", nav_focus: "Fokus", nav_pro: "PRO",
+      sos_modal_title: "Anda Selamat Sekarang", sos_modal_sub: "Fokus hanya pada bulatan ini. Tarik nafas perlahan dan hembus lebih panjang.",
+      close_sos: "Saya Sudah Lebih Tenang",
+      toast_pro_req: "Ciri PRO 🔒 — Masukkan kod di tab PRO",
+      toast_pro_ok: "Tahniah! Semua ciri PRO telah dibuka 🎉",
+      toast_pro_err: "Kod tidak sah. Sila semak semula.",
+      toast_mood: "Mood hari ini disimpan ✓",
+      toast_focus_done: "Sesi fokus tamat! Syabas 🎯"
+    },
+    en: {
+      g_morning: "Good Morning", g_afternoon: "Good Afternoon", g_evening: "Good Evening",
+      home_sub: "Take a deep breath. Your calm space starts here.",
+      sos_title: "SOS Panic Mode (60s)", sos_sub: "Calm racing heart & anxiety immediately",
+      mood_q: "How are you feeling today?", days: "Days",
+      m_calm: "Calm", m_happy: "Good", m_tired: "Tired", m_anxious: "Anxious", m_stressed: "Stressed",
+      pillar_focus: "Deep Focus", pillar_focus_sub: "Pomodoro timer & ambient focus",
+      pillar_sleep: "Deep Sleep", pillar_sleep_sub: "Rain, ocean waves & sleep timer",
+      pillar_stress: "Stress Relief", pillar_stress_sub: "Breathing guide & thought dump",
+      breath_title: "Breathing Timer", breath_sub: "Follow the circle rhythm to calm your nervous system.",
+      ready: "Ready", inhale: "Inhale", hold: "Hold", exhale: "Exhale",
+      start_breath: "Start Breathing", stop_breath: "Stop",
+      dump_title: "Thought Dump Journal", dump_sub: "Write down what weighs on your mind. Release to erase it forever.",
+      dump_ph: "Write your worries here... no one will ever read this.",
+      release_btn: "Release & Erase ✨", dump_done: "Thoughts released. Breathe lighter.",
+      mixer_title: "Soundscape Mixer", mixer_sub: "Blend synthesized ambient sounds (zero data usage).",
+      snd_rain: "🌧️ Gentle Rain", snd_brown: "🌊 Brown Noise (Deep Sleep)", snd_wind: "🍃 Night Wind & Waves",
+      stop_all_snd: "Stop All Sounds",
+      sleep_timer_title: "Sleep Timer (Auto Fade-Out)",
+      sleep_guide_title: "Bedtime Relaxation Guide",
+      sg_1_t: "1. Drop Your Shoulders", sg_1_d: "Lie comfortably. Let your shoulders fall away from your ears and unclench your jaw.",
+      sg_2_t: "2. Gentle Body Scan", sg_2_d: "Feel the weight of your legs, hips, and back sinking softly into the mattress.",
+      sg_3_t: "3. Longer Exhales", sg_3_d: "Exhale slower than you inhale. Let passing thoughts drift away like clouds.",
+      focus_title: "Focus Timer (Deep Work)", focus_sub: "Block distractions and complete one meaningful task at a time.",
+      start_focus: "Start Focus", pause_focus: "Pause", reset: "Reset",
+      focus_snd_title: "Focus Background Sound", focus_snd_sub: "Low-frequency ambient hum to mask distracting external noise.",
+      toggle_hum: "Enable Focus Sound 🎧", stop_hum: "Stop Focus Sound",
+      acc_status: "Account Status", status_free: "Free Version", status_pro: "PRO Active ✓",
+      pro_desc: "Unlock the full TenangJiwa experience with a one-time payment.",
+      pro_f1: "4-7-8 Anti-Anxiety Breathing Technique", pro_f2: "30 & 60 Min Sleep Timer (Auto Fade-Out)",
+      pro_f3: "45 & 60 Min Deep Focus Sessions", pro_f4: "Lifetime Access on This Device",
+      get_pro_btn: "Get PRO Code Now →", have_code: "Already have a PRO Access Code?",
+      unlock_btn: "Unlock PRO 🔓",
+      nav_home: "Home", nav_stress: "Stress", nav_sleep: "Sleep", nav_focus: "Focus", nav_pro: "PRO",
+      sos_modal_title: "You Are Safe Right Now", sos_modal_sub: "Focus only on this circle. Inhale gently and exhale longer.",
+      close_sos: "I Feel Calmer Now",
+      toast_pro_req: "PRO Feature 🔒 — Enter code in PRO tab",
+      toast_pro_ok: "Welcome to PRO! All features unlocked 🎉",
+      toast_pro_err: "Invalid code. Please check again.",
+      toast_mood: "Today's mood saved ✓",
+      toast_focus_done: "Focus session complete! Great job 🎯"
+    }
+  };
+
+  /* =========================================================
+     STATE & LOCALSTORAGE
+     ========================================================= */
+  let state = {
+    lang: localStorage.getItem('tj_lang') || 'ms',
+    isPro: localStorage.getItem('tj_pro') === 'true',
+    streak: parseInt(localStorage.getItem('tj_streak') || '1', 10),
+    mood: localStorage.getItem('tj_mood_today') || ''
+  };
+
+  function updateStreak() {
+    const today = new Date().toISOString().slice(0, 10);
+    const last = localStorage.getItem('tj_last_visit');
+    if (last && last !== today) {
+      const diff = (new Date(today) - new Date(last)) / (1000 * 60 * 60 * 24);
+      state.streak = diff === 1 ? state.streak + 1 : 1;
+      localStorage.setItem('tj_streak', state.streak);
+      localStorage.removeItem('tj_mood_today');
+      state.mood = '';
+    }
+    localStorage.setItem('tj_last_visit', today);
+    document.getElementById('streakCount').textContent = state.streak;
+  }
+
+  function t(key) {
+    return i18n[state.lang][key] || key;
+  }
+
+  function showToast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(window._toastT);
+    window._toastT = setTimeout(() => el.classList.remove('show'), 2600);
+  }
+
+  function applyLanguage() {
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const k = el.getAttribute('data-i18n');
+      if (i18n[state.lang][k]) el.textContent = i18n[state.lang][k];
+    });
+    document.getElementById('dumpInput').placeholder = t('dump_ph');
+    document.getElementById('langToggle').textContent = state.lang === 'ms' ? 'BM → EN' : 'EN → BM';
+
+    const hr = new Date().getHours();
+    const gKey = hr < 12 ? 'g_morning' : (hr < 18 ? 'g_afternoon' : 'g_evening');
+    document.getElementById('greetingText').textContent = t(gKey);
+    updateProUI();
+  }
+
+  function updateProUI() {
+    const badge = document.getElementById('proBadge');
+    const statusLbl = document.getElementById('statusLabel');
+    document.querySelectorAll('.lock-icon').forEach(ic => {
+      ic.style.display = state.isPro ? 'none' : 'inline';
+    });
+    if (state.isPro) {
+      badge.classList.add('active');
+      statusLbl.textContent = t('status_pro');
+      statusLbl.style.color = 'var(--teal)';
+    } else {
+      badge.classList.remove('active');
+      statusLbl.textContent = t('status_free');
+      statusLbl.style.color = 'var(--amber)';
+    }
+  }
+
+  /* =========================================================
+     NAVIGATION
+     ========================================================= */
+  function switchTab(tab) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('view-' + tab).classList.add('active');
+    document.querySelector(`.nav-item[data-tab="${tab}"]`).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /* =========================================================
+     WEB AUDIO API ENGINE (ZERO EXTERNAL MP3)
+     ========================================================= */
+  const SoundEngine = {
+    ctx: null,
+    masterGain: null,
+    nodes: {},
+    humActive: false,
+
+    init() {
+      if (!this.ctx) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        this.ctx = new AudioCtx();
+        this.masterGain = this.ctx.createGain();
+        this.masterGain.gain.value = 1;
+        this.masterGain.connect(this.ctx.destination);
+      }
+      if (this.ctx.state === 'suspended') this.ctx.resume();
+    },
+
+    createNoiseBuffer(type) {
+      const bufferSize = this.ctx.sampleRate * 3;
+      const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+      const output = buffer.getChannelData(0);
+      let lastOut = 0.0;
+      for (let i = 0; i < bufferSize; i++) {
+        const white = Math.random() * 2 - 1;
+        if (type === 'brown') {
+          output[i] = (lastOut + (0.02 * white)) / 1.02;
+          lastOut = output[i];
+          output[i] *= 3.2;
+        } else {
+          output[i] = white * 0.5;
+        }
+      }
+      return buffer;
+    },
+
+    setChannel(name, volPercent) {
+      this.init();
+      const vol = volPercent / 100;
+
+      if (vol <= 0) {
+        if (this.nodes[name]) {
+          this.nodes[name].gain.gain.setTargetAtTime(0, this.ctx.currentTime, 0.15);
+        }
+        this.updateStatus();
+        return;
+      }
+
+      if (!this.nodes[name]) {
+        const src = this.ctx.createBufferSource();
+        src.buffer = this.createNoiseBuffer(name === 'brown' ? 'brown' : 'white');
+        src.loop = true;
+
+        const filter = this.ctx.createBiquadFilter();
+        const gain = this.ctx.createGain();
+        gain.gain.value = 0;
+
+        if (name === 'rain') {
+          filter.type = 'bandpass';
+          filter.frequency.value = 950;
+          filter.Q.value = 0.6;
+        } else if (name === 'brown') {
+          filter.type = 'lowpass';
+          filter.frequency.value = 320;
+        } else if (name === 'wind') {
+          filter.type = 'lowpass';
+          filter.frequency.value = 450;
+          const lfo = this.ctx.createOscillator();
+          const lfoGain = this.ctx.createGain();
+          lfo.frequency.value = 0.12;
+          lfoGain.gain.value = 260;
+          lfo.connect(lfoGain);
+          lfoGain.connect(filter.frequency);
+          lfo.start();
+        }
+
+        src.connect(filter);
+        filter.connect(gain);
+        gain.connect(this.masterGain);
+        src.start();
+        this.nodes[name] = { src, gain };
+      }
+
+      const scale = name === 'rain' ? 0.35 : (name === 'brown' ? 0.55 : 0.45);
+      this.nodes[name].gain.gain.setTargetAtTime(vol * scale, this.ctx.currentTime, 0.15);
+      this.updateStatus();
+    },
+
+    toggleFocusHum() {
+      this.init();
+      const btn = document.getElementById('toggleFocusHumBtn');
+      const st = document.getElementById('focusHumStatus');
+
+      if (!this.humActive) {
+        const osc1 = this.ctx.createOscillator();
+        const osc2 = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc1.type = 'sine'; osc1.frequency.value = 136.1;
+        osc2.type = 'sine'; osc2.frequency.value = 140.1; // subtle 4Hz focus beat
+        gain.gain.value = 0.08;
+        osc1.connect(gain); osc2.connect(gain); gain.connect(this.ctx.destination);
+        osc1.start(); osc2.start();
+        this.nodes.hum = { osc1, osc2, gain };
+        this.humActive = true;
+        btn.textContent = t('stop_hum');
+        st.textContent = 'ON';
+      } else {
+        if (this.nodes.hum) {
+          this.nodes.hum.gain.gain.setTargetAtTime(0, this.ctx.currentTime, 0.2);
+          setTimeout(() => {
+            try { this.nodes.hum.osc1.stop(); this.nodes.hum.osc2.stop(); } catch(e){}
+            delete this.nodes.hum;
+          }, 300);
+        }
+        this.humActive = false;
+        btn.textContent = t('toggle_hum');
+        st.textContent = 'OFF';
+      }
+    },
+
+    stopAllMixer() {
+      ['rain', 'brown', 'wind'].forEach(k => {
+        if (this.nodes[k]) this.nodes[k].gain.gain.setTargetAtTime(0, this.ctx.currentTime, 0.15);
+      });
+      ['volRain', 'volBrown', 'volWind'].forEach(id => document.getElementById(id).value = 0);
+      ['valRain', 'valBrown', 'valWind'].forEach(id => document.getElementById(id).textContent = '0%');
+      this.updateStatus();
+    },
+
+    fadeOutMaster(seconds = 5) {
+      if (!this.ctx || !this.masterGain) return;
+      this.masterGain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + seconds);
+      setTimeout(() => {
+        this.stopAllMixer();
+        this.masterGain.gain.value = 1;
+      }, seconds * 1000);
+    },
+
+    updateStatus() {
+      const active = (+volRain.value > 0 || +volBrown.value > 0 || +volWind.value > 0);
+      document.getElementById('audioStatus').textContent = active ? 'PLAYING' : 'OFF';
+    }
+  };
+
+  /* =========================================================
+     BREATHING ENGINE (TAB STRESS)
+     ========================================================= */
+  let breathMode = 'box';
+  let breathRunning = false;
+  let breathTimeout = null;
+  let breathTick = null;
+
+  function selectBreathMode(mode) {
+    if (mode === '478' && !state.isPro) {
+      showToast(t('toast_pro_req'));
+      switchTab('pro');
+      return;
+    }
+    breathMode = mode;
+    document.getElementById('modeBoxBtn').classList.toggle('active', mode === 'box');
+    document.getElementById('mode478Btn').classList.toggle('active', mode === '478');
+    if (breathRunning) stopBreathing();
+  }
+
+  function startBreathing() {
+    breathRunning = true;
+    document.getElementById('breathToggleBtn').textContent = t('stop_breath');
+    const steps = breathMode === 'box'
+      ? [{ k: 'inhale', s: 4, sc: 1.48 }, { k: 'hold', s: 4, sc: 1.48 }, { k: 'exhale', s: 4, sc: 1.0 }, { k: 'hold', s: 4, sc: 1.0 }]
+      : [{ k: 'inhale', s: 4, sc: 1.52 }, { k: 'hold', s: 7, sc: 1.52 }, { k: 'exhale', s: 8, sc: 1.0 }];
+
+    let idx = 0;
+    const ring = document.getElementById('breathRing');
+    const lbl = document.getElementById('breathLabel');
+    const cnt = document.getElementById('breathCount');
+
+    function runStep() {
+      if (!breathRunning) return;
+      const st = steps[idx];
+      ring.style.transition = `transform ${st.s}s ease-in-out`;
+      ring.style.transform = `scale(${st.sc})`;
+      lbl.textContent = t(st.k);
+
+      let rem = st.s;
+      cnt.textContent = rem;
+      clearInterval(breathTick);
+      breathTick = setInterval(() => {
+        rem--;
+        if (rem > 0) cnt.textContent = rem;
+      }, 1000);
+
+      breathTimeout = setTimeout(() => {
+        idx = (idx + 1) % steps.length;
+        runStep();
+      }, st.s * 1000);
+    }
+    runStep();
+  }
+
+  function stopBreathing() {
+    breathRunning = false;
+    clearTimeout(breathTimeout);
+    clearInterval(breathTick);
+    const ring = document.getElementById('breathRing');
+    ring.style.transition = 'transform 0.5s ease';
+    ring.style.transform = 'scale(1)';
+    document.getElementById('breathLabel').textContent = t('ready');
+    document.getElementById('breathCount').textContent = '•';
+    document.getElementById('breathToggleBtn').textContent = t('start_breath');
+  }
+
+  /* =========================================================
+     SLEEP TIMER
+     ========================================================= */
+  let sleepInterval = null;
+  function startSleepTimer(mins, isProFeature = false) {
+    if (isProFeature && !state.isPro) {
+      showToast(t('toast_pro_req'));
+      switchTab('pro');
+      return;
+    }
+    clearInterval(sleepInterval);
+    let sec = mins * 60;
+    const disp = document.getElementById('sleepTimerDisplay');
+    showToast(`Sleep Timer: ${mins} min`);
+
+    sleepInterval = setInterval(() => {
+      sec--;
+      const m = String(Math.floor(sec / 60)).padStart(2, '0');
+      const s = String(sec % 60).padStart(2, '0');
+      disp.textContent = `${m}:${s}`;
+      if (sec === 6) SoundEngine.fadeOutMaster(5);
+      if (sec <= 0) {
+        clearInterval(sleepInterval);
+        disp.textContent = '--:--';
+      }
+    }, 1000);
+  }
+
+  /* =========================================================
+     FOCUS TIMER
+     ========================================================= */
+  let focusTotal = 25 * 60;
+  let focusLeft = focusTotal;
+  let focusInterval = null;
+
+  function renderFocus() {
+    const m = String(Math.floor(focusLeft / 60)).padStart(2, '0');
+    const s = String(focusLeft % 60).padStart(2, '0');
+    document.getElementById('focusDisplay').textContent = `${m}:${s}`;
+  }
+
+  function setFocusDuration(mins, isProFeature, btnEl) {
+    if (isProFeature && !state.isPro) {
+      showToast(t('toast_pro_req'));
+      switchTab('pro');
+      return;
+    }
+    clearInterval(focusInterval);
+    focusInterval = null;
+    document.getElementById('focusStartBtn').textContent = t('start_focus');
+    document.querySelectorAll('#view-focus .pill').forEach(p => p.classList.remove('active'));
+    btnEl.classList.add('active');
+    focusTotal = mins * 60;
+    focusLeft = focusTotal;
+    renderFocus();
+  }
+
+  /* =========================================================
+     SOS PANIC MODAL
+     ========================================================= */
+  let sosInt = null;
+  let sosPhaseInt = null;
+  function openSos() {
+    const modal = document.getElementById('sosModal');
+    const circle = document.getElementById('sosCircle');
+    const cue = document.getElementById('sosCue');
+    const timer = document.getElementById('sosTimer');
+    modal.classList.add('open');
+
+    let left = 60;
+    timer.textContent = left + 's';
+    let inhale = true;
+
+    function pulse() {
+      if (inhale) {
+        cue.textContent = t('inhale');
+        circle.style.transform = 'scale(1.28)';
+      } else {
+        cue.textContent = t('exhale');
+        circle.style.transform = 'scale(0.92)';
+      }
+      inhale = !inhale;
+    }
+    pulse();
+    sosPhaseInt = setInterval(pulse, 4000);
+
+    sosInt = setInterval(() => {
+      left--;
+      timer.textContent = left + 's';
+      if (left <= 0) closeSos();
+    }, 1000);
+  }
+
+  function closeSos() {
+    clearInterval(sosInt);
+    clearInterval(sosPhaseInt);
+    document.getElementById('sosModal').classList.remove('open');
+  }
+
+  /* =========================================================
+     EVENT LISTENERS & INIT
+     ========================================================= */
+  document.getElementById('langToggle').addEventListener('click', () => {
+    state.lang = state.lang === 'ms' ? 'en' : 'ms';
+    localStorage.setItem('tj_lang', state.lang);
+    applyLanguage();
+  });
+
+  // Mood check-in
+  document.querySelectorAll('.mood-btn').forEach(btn => {
+    if (btn.dataset.mood === state.mood) btn.classList.add('selected');
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      state.mood = btn.dataset.mood;
+      localStorage.setItem('tj_mood_today', state.mood);
+      showToast(t('toast_mood'));
+    });
+  });
+
+  // Breathing toggle
+  document.getElementById('breathToggleBtn').addEventListener('click', () => {
+    breathRunning ? stopBreathing() : startBreathing();
+  });
+
+  // Thought dump release
+  document.getElementById('releaseBtn').addEventListener('click', () => {
+    const area = document.getElementById('dumpInput');
+    if (!area.value.trim()) return;
+    area.classList.add('dissolving');
+    setTimeout(() => {
+      area.value = '';
+      area.classList.remove('dissolving');
+      showToast(t('dump_done'));
+    }, 1100);
+  });
+
+  // Mixer sliders
+  const volRain = document.getElementById('volRain');
+  const volBrown = document.getElementById('volBrown');
+  const volWind = document.getElementById('volWind');
+
+  volRain.addEventListener('input', e => {
+    document.getElementById('valRain').textContent = e.target.value + '%';
+    SoundEngine.setChannel('rain', +e.target.value);
+  });
+  volBrown.addEventListener('input', e => {
+    document.getElementById('valBrown').textContent = e.target.value + '%';
+    SoundEngine.setChannel('brown', +e.target.value);
+  });
+  volWind.addEventListener('input', e => {
+    document.getElementById('valWind').textContent = e.target.value + '%';
+    SoundEngine.setChannel('wind', +e.target.value);
+  });
+  document.getElementById('stopAudioBtn').addEventListener('click', () => SoundEngine.stopAllMixer());
+
+  // Focus controls
+  document.getElementById('focusStartBtn').addEventListener('click', () => {
+    const btn = document.getElementById('focusStartBtn');
+    if (focusInterval) {
+      clearInterval(focusInterval);
+      focusInterval = null;
+      btn.textContent = t('start_focus');
+    } else {
+      btn.textContent = t('pause_focus');
+      focusInterval = setInterval(() => {
+        focusLeft--;
+        renderFocus();
+        if (focusLeft <= 0) {
+          clearInterval(focusInterval);
+          focusInterval = null;
+          btn.textContent = t('start_focus');
+          showToast(t('toast_focus_done'));
+        }
+      }, 1000);
+    }
+  });
+
+  document.getElementById('focusResetBtn').addEventListener('click', () => {
+    clearInterval(focusInterval);
+    focusInterval = null;
+    focusLeft = focusTotal;
+    renderFocus();
+    document.getElementById('focusStartBtn').textContent = t('start_focus');
+  });
+
+  document.getElementById('toggleFocusHumBtn').addEventListener('click', () => SoundEngine.toggleFocusHum());
+
+  // SOS Modal
+  document.getElementById('openSosBtn').addEventListener('click', openSos);
+  document.getElementById('closeSosBtn').addEventListener('click', closeSos);
+
+  // PRO Unlock
+  document.getElementById('unlockProBtn').addEventListener('click', () => {
+    const val = document.getElementById('proCodeInput').value.trim().toUpperCase();
+    if (val === SECRET_PRO_CODE) {
+      state.isPro = true;
+      localStorage.setItem('tj_pro', 'true');
+      updateProUI();
+      document.getElementById('proCodeInput').value = '';
+      showToast(t('toast_pro_ok'));
+    } else {
+      showToast(t('toast_pro_err'));
+    }
+  });
+
+  // Boot App
+  updateStreak();
+  applyLanguage();
+  renderFocus();
+</script>
+</body>
+</html>
